@@ -1,168 +1,272 @@
 //
 //  ViewController.swift
-//  Countriess
+//  ScrabbleWords
 //
-//  Created by Josfry Barillas on 4/27/22.
+//  Created by Josfry Barillas on 4/19/22.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
-
-    var allCountries = [String]()
-
+var allWords = [String]()
+var wordsContainigUU = [String]()
+lazy var wordsContainingXYZ: [String] = []
+    var wordsWithConsecutives = [String]()
+    // lazy var NameList: [String] = UserDefaults.standard.array(forKey: "NameList") as? [String] ?? [String]()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let countryWordsURL = Bundle.main.url(forResource: "countries", withExtension: "txt") {
-            if let countryWords = try? String(contentsOf: countryWordsURL) {
-                allCountries = countryWords.components(separatedBy: "\n")
-               // print(allCountries)
+        if let scrabbleWordsURL = Bundle.main.url(forResource: "sowpods", withExtension: "txt") {
+            if let scrabbleWords = try? String(contentsOf: scrabbleWordsURL) {
+                allWords = scrabbleWords.components(separatedBy: "\n")
             } else {
-                allCountries = ["wheresMyWordsAt"]
-                //print(allCountries)
+                allWords = ["wheresMyWordsAt"]
             }
         }
-        countryWithShortestName()
-        //countriesWithMoreVowelsThanFiftyPercent(searchCharOne: "a", searchCharTwo: "e", searchCharThree: "i", searchCharFour: "o", searchCharFive: "u")
-        //countriesBeginningAndEndingWithvowel(searchCharOne: "a", searchCharTwo: "e", searchCharThree: "i", searchCharFour: "o", searchCharFive: "u")
-        //countriesWithUnited(searchChar: "United")
+   
         
+        
+        //wordsWithConsecutiveLetters()
+        // findLongestPalindrome()
+       // lettersQXZisLeastCommon(searchCharOne: "Q", searchCharTwo: "X", searchCharThree: "Z")
+        // longestWordNotContainingVowels(searchCharOne: "A", searchCharTwo: "E", searchCharThree: "I", searchCharFour: "O", searchCharFive: "U")
+        //shortestWordContainingVowels(searchCharOne: "A", searchCharTwo: "E", searchCharThree: "I", searchCharFour: "O", searchCharFive: "U")
+        //WordsEndingWithIghtly(searchCharOne: "GHTLY")
+        // wordsContainingType(searchCharOne: "TYPE")
+       // wordsWithVowelsInAnyOrder(searchCharOne: "A", searchCharTwo: "E", searchCharThree: "I", searchCharFour: "O", searchCharFive: "U", searchCharSix: "Y")
+        //wordsWithFirstAndLastY(searchCharOne: "Y")
+       // wordsWithNoBorX(searchCharOne: "B", searchCharTwo: "X")
+        //wordsWithNoEorA(searchCharOne: "E", searchCharTwo: "A")
+        //wordsContainingCATWithFiveCharacters(searchCharOne: "CAT")
+        //wordsContainingQNotU(searchCharOne: "Q", seatchCharTwo: "U")
+        //returnWordsContainingUU(searchText: "OO")
+       // wordsContainingXYZ(searchCharOne: "X", searchCharTwo: "Y", searchCharThree: "Z")
+        areWordsConsecutive()
     }
 
-    
-    func countriesWithUnited(searchChar: String) {
-        var unitedInName = [String]()
-        
-        for country in allCountries where country.contains(searchChar) {
-            unitedInName.append(country)
+    func returnWordsContainingUU(searchText: String) {
+        wordsContainigUU = allWords.filter { item in
+            return item.lowercased().contains(searchText.lowercased())
         }
-        print(unitedInName)
+        print(wordsContainigUU)
+        print(wordsContainigUU.count)
     }
     
-    func countriesBeginningAndEndingWithvowel(searchCharOne: String, searchCharTwo: String, searchCharThree: String, searchCharFour: String, searchCharFive: String) {
-        var countWithVowels = [String]()
-        
-        for country in allCountries  {
-           var lowerCaseCountry = country.lowercased()
-            if lowerCaseCountry.starts(with: searchCharOne) && lowerCaseCountry.hasSuffix(searchCharOne) {
-                print(lowerCaseCountry)
-            } else if lowerCaseCountry.starts(with: searchCharTwo) && lowerCaseCountry.hasSuffix(searchCharTwo) {
-                print(lowerCaseCountry)
-            } else if lowerCaseCountry.starts(with: searchCharThree) && lowerCaseCountry.hasSuffix(searchCharThree) {
-                print(lowerCaseCountry)
-            } else if lowerCaseCountry.starts(with: searchCharFour) && lowerCaseCountry.hasSuffix(searchCharFour) {
-                print(lowerCaseCountry)
-            } else if lowerCaseCountry.starts(with: searchCharFive) && lowerCaseCountry.hasSuffix(searchCharFive) {
-                print(lowerCaseCountry)
-            }
+
+    func wordsContainingXYZ(searchCharOne: String, searchCharTwo: String, searchCharThree: String) {
+        var wordsWithXYZ = [String]()
+        for word in allWords where word.contains(searchCharOne) && word.contains(searchCharTwo) && word.contains(searchCharThree) {
+            wordsWithXYZ.append(word)
+
         }
-        print(countWithVowels)
+    
+        print(wordsWithXYZ)
     }
     
-    func countriesWithMoreVowelsThanFiftyPercent(searchCharOne: Character, searchCharTwo: Character, searchCharThree: Character, searchCharFour: Character, searchCharFive: Character) {
-        var vowelCount = 0
-        var countryCountHalf = 0
-        var countriesWithLotsOfVowels = [String]()
+    func wordsContainingQNotU(searchCharOne: String, seatchCharTwo: String) {
+        var wordsWithQNotU = [String]()
         
-        for country in allCountries   {
-           var lowerCasedCountries = country.lowercased()
-            var totalAs = 0
-            var totalEs = 0
-            var totalIs = 0
-            var totalOs = 0
-            var totalUs = 0
-           
-            countryCountHalf = country.count / 2
-            
-            for letter in lowerCasedCountries {
-                if letter == searchCharOne {
-                    totalAs += 1
-                } else if letter == searchCharTwo {
-                    totalEs += 1
-                } else if letter == searchCharThree {
-                    totalIs += 1
-                } else if letter == searchCharFour {
-                    totalOs += 1
-                } else if letter == searchCharFive {
-                    totalUs += 1
-                }
-                vowelCount = totalAs + totalEs + totalIs + totalOs + totalUs
-                
-            }
-            
-            
-            if vowelCount > countryCountHalf {
-                print("lots of vowels in this country right here \(country)")
-                vowelCount = 0
-                countriesWithLotsOfVowels.append(country)
-            } else {
-                print("not enought vowels in this country: \(country)")
-                vowelCount = 0
-            }
-            print(countriesWithLotsOfVowels)
+        for word in allWords where word.contains(searchCharOne) && !word.contains(seatchCharTwo) {
+            wordsWithQNotU.append(word)
+        }
+        print(wordsWithQNotU)
+    }
+    
+    func wordsContainingCATWithFiveCharacters(searchCharOne: String) {
+        var wordsWithCat = [String]()
+        
+        for word in allWords where word.contains(searchCharOne) && word.count == 5 {
+            wordsWithCat.append(word)
+        }
+        print(wordsWithCat)
+    }
+    
+    func wordsWithNoEorA(searchCharOne: String, searchCharTwo: String) {
+        var wordsWithNoEorA = [String]()
+        for word in allWords where !word.contains(searchCharOne) && !word.contains(searchCharTwo) && word.count >= 15 {
+            wordsWithNoEorA.append(word)
+        }
+        print(wordsWithNoEorA)
+    }
+    
+    func wordsWithNoBorX(searchCharOne: String, searchCharTwo: String) {
+        var wordsWithNoBorX = [String]()
+        for word in allWords where !word.contains(searchCharOne) && !word.contains(searchCharTwo) && word.count < 5 {
+            wordsWithNoBorX.append(word)
+        }
+        print(wordsWithNoBorX)
+    }
+    
+    
+    func wordsWithFirstAndLastY(searchCharOne: String) {
+        var wordsWithFirstAndLastY = [String]()
+        for word in allWords where word.starts(with: searchCharOne) && word.hasSuffix(searchCharOne) {
+            wordsWithFirstAndLastY.append(word)
+        }
+        print(wordsWithFirstAndLastY)
+    }
+    
+    func wordsWithVowelsInAnyOrder(searchCharOne: String, searchCharTwo: String, searchCharThree: String, searchCharFour: String, searchCharFive: String, searchCharSix: String) {
+        var wordsWithVowelsInAnyOrder = [String]()
+        for word in allWords where word.contains(searchCharOne) && word.contains(searchCharTwo) && word.contains(searchCharThree) && word.contains(searchCharFour) && word.contains(searchCharFive) && word.contains(searchCharSix) {
+            wordsWithVowelsInAnyOrder.append(word)
+        }
+        print(wordsWithVowelsInAnyOrder)
+        print(wordsWithVowelsInAnyOrder.sorted())
+    }
+    
+    func wordsContainingType(searchCharOne: String) {
+        var wordsContainingType = 0
+        var wordsThatHaveType = [String]()
+        
+        for word in allWords where word.contains(searchCharOne) {
+            wordsContainingType += 1
+            wordsThatHaveType.append(word)
+        }
+        print(wordsThatHaveType)
+        print(wordsContainingType)
+        
+    }
+    
+    func wordsEndingWithIghtly(searchCharOne: String) {
+        var wordsEndingWithIghtly = [String]()
+        
+        for word in allWords where word.contains(searchCharOne) {
+            wordsEndingWithIghtly.append(word)
+        }
+        print(wordsEndingWithIghtly)
     }
 
-}
-    
-    func countryWithShortestName() {
-        var smallestCountryName = [String]()
-        var tiedCountries = [String]()
-        var countriesShorterThanTheRest = [String]()
-        
-        for country in allCountries.dropFirst() {
-            smallestCountryName.append(country)
-            
-            guard var previous = smallestCountryName.first else {return}
-            if var smallest = smallestCountryName.min(by: { $0.count < $1.count } ){
-                    
-                if smallest.count <= previous.count && smallest.count < country.count {
-                    print(smallest, previous, country)
-                 //   print(country)
-                } else if smallest.count == country.count {
-                    smallest = country
-                }
+    func shortestWordContainingVowels(searchCharOne: String, searchCharTwo: String, searchCharThree: String, searchCharFour: String, searchCharFive: String) {
+        var smallestWord = [String]()
+        for word in allWords where word.contains(searchCharOne) && word.contains(searchCharTwo) && word.contains(searchCharThree) && word.contains(searchCharFour) && word.contains(searchCharFive) {
+            smallestWord.append(word)
+            if let smallest = smallestWord.min(by: {$0.count < $1.count}) {
                 print(smallest)
-                previous = country
-                if countriesShorterThanTheRest.contains(smallest) {
-                  //  print("allready in the array :\(smallest)")
-                } else {
-                    
-                    countriesShorterThanTheRest.append(smallest)
-                   // print(countriesShorterThanTheRest)
-                }
-                
             }
-
-        }
-        print(countriesShorterThanTheRest)
-        guard var shortWord = countriesShorterThanTheRest.first else {return}
-        
-        for word in countriesShorterThanTheRest.dropLast() {
-            if word.count >= shortWord.count {
-                print("word is to high")
-            } else if word.count < shortWord.count {
-                print("word is lowering")
-            }
-            shortWord = word
+            
         }
         
-        //MARK: - TODO find a way to find the shortest elements and add them to the tied array
+        
     }
+    
+    func longestWordNotContainingVowels(searchCharOne: String, searchCharTwo: String, searchCharThree: String, searchCharFour: String, searchCharFive: String) {
+        var longestWord = [String]()
+        for word in allWords where !word.contains(searchCharOne) && !word.contains(searchCharTwo) && !word.contains(searchCharThree) && !word.contains(searchCharFour) && !word.contains(searchCharFive) {
+            longestWord.append(word)
+            if let max = longestWord.max(by: {$1.count > $0.count})  {
+                print(max)
+            }
+            
+        }
+    }
+    
+    func lettersQXZisLeastCommon(searchCharOne: String, searchCharTwo: String, searchCharThree: String) {
+        var totalWordsWithQ = 0
+        var totalWordsWithX = 0
+        var totalWordsWithZ = 0
+        
+        for word in allWords {
+            if word.contains(searchCharOne) {
+                totalWordsWithQ += 1
+            } else if word.contains(searchCharTwo) {
+                totalWordsWithX += 1
+            } else if word.contains(searchCharThree) {
+                totalWordsWithZ += 1
+            } else {
+
+            }
+          
+            
+        }
+        print("words with Q \(totalWordsWithQ)")
+        print("words with X \(totalWordsWithX)")
+        print("words with Z \(totalWordsWithZ)")
+        if totalWordsWithQ < totalWordsWithX && totalWordsWithQ < totalWordsWithZ {
+            print("Q is within less words with \(totalWordsWithQ)")
+        } else if totalWordsWithX < totalWordsWithQ && totalWordsWithX < totalWordsWithZ {
+            print("X is within less words with \(totalWordsWithX)")
+        } else if totalWordsWithZ < totalWordsWithX && totalWordsWithZ < totalWordsWithQ {
+            print("Z is within less words with \(totalWordsWithZ)")
+        }
+        
+        
+    }
+    
+    func findLongestPalindrome() {
+        var palindromeWords = [String]()
+        for word in allWords {
+            if word == String(word.reversed()) {
+                palindromeWords.append(word)
+            }
+        }
+        print(palindromeWords.max(by: {$1.count > $0.count }))
+        print(palindromeWords)
+    }
+    
+    func areWordsConsecutive() {
+        for word in allWords {
+            checkForConsecutiveLetters(string: word)
+            
+        }
+        print(wordsWithConsecutives)
+    }
+    //MARK: - ToDO last question in the wordplay ask Dan to review if possible...
+    func checkForConsecutiveLetters(string: String) {
+        var previousLetter = string.first
+        for letter in string.dropFirst() {
+            if letter == previousLetter {
+                print(letter,previousLetter)
+                wordsWithConsecutives.append(string)
+
+            }
+            previousLetter = letter
+        }
+    }
+//    func checkForConsecutiveLetters(string: String) -> Bool {
+//        let word = [Character](string)
+//
+//
+//
+//        if word.isEmpty {
+//            return true
+//        }
+//        var startIndex = word.startIndex
+//        var endIndex = word.index(before: word.endIndex)
+//
+//        while startIndex < endIndex {
+//            if word[startIndex] != word[startIndex + 1] {
+//                startIndex = word.index(after: startIndex)
+//            } else {
+//
+////                print("letter: \(word[startIndex]) :: \(word[startIndex + 1])")
+////                print(wordsWithConsecutives)
+//                wordsWithConsecutives.append(string)
+////                print(wordsWithConsecutives)
+//
+//                break
+//            }
+//
+////            print(wordsWithConsecutives)
+////            print(string)
+//          print(wordsWithConsecutives)
+//
+//
+//        }
+//
+//
+//
+//
+//       return true
+//
+//}
 
 }
 
-/*
- func shortestWordContainingVowels(searchCharOne: String, searchCharTwo: String, searchCharThree: String, searchCharFour: String, searchCharFive: String) {
-     var smallestWord = [String]()
-     for word in allWords where word.contains(searchCharOne) && word.contains(searchCharTwo) && word.contains(searchCharThree) && word.contains(searchCharFour) && word.contains(searchCharFive) {
-         smallestWord.append(word)
-         if let smallest = smallestWord.min(by: {$0.count < $1.count}) {
-             print(smallest)
-         }
-         
-     }
-     
-     
- }
- */
+extension StringProtocol {
+    subscript(offset: Int) -> Character {
+        self[index(startIndex, offsetBy: offset)]
+    }
+}
